@@ -428,6 +428,31 @@
   }
   .edit-btn:hover{ color: var(--roxo); background: rgba(168,85,247,0.12); }
 
+
+  /* ---------------- FILTRO DE CATEGORIAS (rosca e histórico) ---------------- */
+  .filtro-cat-wrap{ position: relative; flex-shrink:0; }
+  .filtro-cat-btn{
+    display:flex; align-items:center; gap:6px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 999px; padding: 7px 12px;
+    font-family: var(--font-mono); font-size: 11.5px;
+    color: var(--texto); cursor:pointer; white-space:nowrap;
+    transition: background .15s ease;
+  }
+  .filtro-cat-btn:hover{ background: rgba(255,255,255,0.09); }
+  .filtro-cat-btn .chev{ color: var(--texto-fraco); font-size: 9px; }
+  .filtro-cat-dropdown{
+    position:absolute; top: calc(100% + 8px); right:0;
+    background: var(--card); border:1px solid rgba(255,255,255,0.14);
+    border-radius: 15px; padding: 9px;
+    min-width: 215px; max-height: 320px; overflow-y:auto;
+    z-index: 25; box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+  }
+  .filtro-cat-dropdown::-webkit-scrollbar{ width:5px; }
+  .filtro-cat-dropdown::-webkit-scrollbar-thumb{ background: rgba(168,85,247,0.45); border-radius:10px; }
+  .filtro-cat-dropdown .filtro-cartao-item{ font-size: 13px; }
+
 </style>
 </head>
 <body>
@@ -511,8 +536,24 @@
     </div>
 
     <div class="card">
-      <h2>🍩 Gastos por categoria</h2>
-      <div class="card-sub">Para onde seu dinheiro está indo</div>
+      <div class="card-head">
+        <div>
+          <h2>🍩 Gastos por categoria</h2>
+          <div class="card-sub">Para onde seu dinheiro está indo</div>
+        </div>
+        <div class="filtro-cat-wrap">
+          <button class="filtro-cat-btn" id="fcatdonutBtn" onclick="toggleFiltroCat('donut')">
+            🏷️ <span id="fcatdonutLabel">Todas</span> <span class="chev">▾</span>
+          </button>
+          <div class="filtro-cat-dropdown" id="fcatdonutDd" style="display:none;">
+            <label class="filtro-cartao-item filtro-cartao-especial">
+              <input type="checkbox" id="fcatdonutTodas" onchange="onFiltroCatTodas('donut')"> Todas as categorias
+            </label>
+            <div class="filtro-cartao-sep"></div>
+            <div id="fcatdonutLista"></div>
+          </div>
+        </div>
+      </div>
       <div class="donut-wrap">
         <svg width="190" height="190" viewBox="0 0 190 190" id="donutSvg"></svg>
         <div class="donut-legend" id="donutLegend"></div>
@@ -608,8 +649,24 @@
   <!-- ABA: HISTÓRICO -->
   <section class="aba" id="aba-historico">
     <div class="card">
-      <h2>🧾 Lançamentos</h2>
-      <div class="card-sub">Do período selecionado acima</div>
+      <div class="card-head">
+        <div>
+          <h2>🧾 Lançamentos</h2>
+          <div class="card-sub">Do período selecionado acima</div>
+        </div>
+        <div class="filtro-cat-wrap">
+          <button class="filtro-cat-btn" id="fcathistBtn" onclick="toggleFiltroCat('hist')">
+            🏷️ <span id="fcathistLabel">Todas</span> <span class="chev">▾</span>
+          </button>
+          <div class="filtro-cat-dropdown" id="fcathistDd" style="display:none;">
+            <label class="filtro-cartao-item filtro-cartao-especial">
+              <input type="checkbox" id="fcathistTodas" onchange="onFiltroCatTodas('hist')"> Todas as categorias
+            </label>
+            <div class="filtro-cartao-sep"></div>
+            <div id="fcathistLista"></div>
+          </div>
+        </div>
+      </div>
       <div class="lista" id="listaLancamentos"></div>
     </div>
   </section>
@@ -904,7 +961,10 @@ let mesFiltro = 'todos'; // formato 'YYYY-MM' ou 'todos'
 let anoFiltro = 'todos'; // formato 'YYYY' ou 'todos'
 const CARTOES_DISPONIVEIS = ['Santander', 'Neon', 'Nu', 'MercadoPago'];
 let cartoesFiltro = 'todos'; // 'todos' | 'nenhum' | array de nomes de cartão selecionados
-let anoGrafico = null; // ano exibido no gráfico Receita vs. Gasto — INDEPENDENTE do filtro do topo
+let anoGrafico = null;
+/* Filtros de categoria: um para a rosca, outro para o histórico.
+   Declarados aqui porque a renderização inicial já os consulta. */
+let catFiltro = { donut: 'todas', hist: 'todas' }; // ano exibido no gráfico Receita vs. Gasto — INDEPENDENTE do filtro do topo
 
 /* Converte qualquer formato de data (ISO, Date, string longa tipo
    "Wed Jul 01 2026 04:00:00 GMT-0300 (...)") para 'yyyy-MM-dd'. */
@@ -1384,7 +1444,9 @@ function renderKPIs(){
 
 /* ---------------- RENDER: DONUT ---------------- */
 function renderDonut(){
-  const gastos = lancamentosFiltrados().filter(l => l.tipo === 'gasto');
+  const gastos = lancamentosFiltrados()
+    .filter(l => l.tipo === 'gasto')
+    .filter(l => passaFiltroCat(l, 'donut'));
   const porCategoria = {};
   gastos.forEach(g => { porCategoria[g.cat] = (porCategoria[g.cat]||0) + g.valor; });
   const total = Object.values(porCategoria).reduce((a,b)=>a+b,0);
@@ -1593,7 +1655,7 @@ function previewMeta(id, valorDigitado, alvo){
 /* ---------------- RENDER: HISTÓRICO ---------------- */
 function renderHistorico(){
   const container = document.getElementById('listaLancamentos');
-  const dados = lancamentosFiltrados();
+  const dados = lancamentosFiltrados().filter(l => passaFiltroCat(l, 'hist'));
   if(!dados.length){
     container.innerHTML = '<div class="empty">Nenhum lançamento neste mês. Adicione um acima! 👆</div>';
     return;
@@ -2053,6 +2115,116 @@ document.addEventListener('keydown', function(e){
     if(ov && ov.style.display === 'flex') fecharEdicao();
   }
 });
+
+
+
+/* ================================================================
+   FILTROS DE CATEGORIA
+   ================================================================
+   Dois filtros independentes entre si e do filtro do topo:
+     'donut' -> afeta apenas o gráfico de rosca
+     'hist'  -> afeta apenas a lista de lançamentos
+   Valor: 'todas' ou um array com os nomes das categorias marcadas. */
+
+function fcatId(qual, sufixo){ return 'fcat' + qual + sufixo; }
+
+/* A rosca mostra só gastos; o histórico mostra gastos e receitas. */
+function categoriasDoFiltro(qual){
+  if(qual === 'donut') return Object.keys(CATEGORIAS_GASTO);
+  return [...new Set(Object.keys(CATEGORIAS_GASTO).concat(Object.keys(CATEGORIAS_RECEITA)))];
+}
+
+function infoCategoria(cat){
+  return CATEGORIAS_GASTO[cat] || CATEGORIAS_RECEITA[cat] || { icone: '🔖', cor: '#9891b8' };
+}
+
+/* Um lançamento passa pelo filtro? */
+function passaFiltroCat(l, qual){
+  const f = catFiltro[qual];
+  if(f === 'todas') return true;
+  return Array.isArray(f) && f.includes(l.cat);
+}
+
+function toggleFiltroCat(qual){
+  const dd = document.getElementById(fcatId(qual, 'Dd'));
+  const abrir = dd.style.display === 'none';
+
+  // fecha qualquer outro filtro de categoria aberto
+  document.querySelectorAll('.filtro-cat-dropdown').forEach(function(el){ el.style.display = 'none'; });
+
+  dd.style.display = abrir ? 'block' : 'none';
+  if(abrir) popularFiltroCatLista(qual);
+}
+
+function popularFiltroCatLista(qual){
+  const lista = document.getElementById(fcatId(qual, 'Lista'));
+  if(!lista) return;
+
+  const marcadas = Array.isArray(catFiltro[qual]) ? catFiltro[qual] : [];
+
+  lista.innerHTML = categoriasDoFiltro(qual).map(function(c){
+    const info = infoCategoria(c);
+    return `
+      <label class="filtro-cartao-item">
+        <input type="checkbox" value="${c}" ${marcadas.includes(c) ? 'checked' : ''}
+               onchange="onFiltroCatItem('${qual}', '${c.replace(/'/g,"\\'")}', this.checked)">
+        <span class="dot" style="background:${info.cor}"></span> ${info.icone} ${c}
+      </label>`;
+  }).join('');
+
+  const todas = document.getElementById(fcatId(qual, 'Todas'));
+  if(todas) todas.checked = catFiltro[qual] === 'todas';
+}
+
+function onFiltroCatTodas(qual){
+  catFiltro[qual] = 'todas';
+  popularFiltroCatLista(qual);
+  atualizarLabelFiltroCat(qual);
+  aplicarFiltroCat(qual);
+}
+
+function onFiltroCatItem(qual, cat, marcado){
+  let atuais = Array.isArray(catFiltro[qual]) ? catFiltro[qual].slice() : [];
+  if(marcado){
+    if(atuais.indexOf(cat) === -1) atuais.push(cat);
+  } else {
+    atuais = atuais.filter(function(c){ return c !== cat; });
+  }
+  // desmarcar tudo volta para "todas" — evita ficar com a tela vazia sem querer
+  catFiltro[qual] = atuais.length ? atuais : 'todas';
+  popularFiltroCatLista(qual);
+  atualizarLabelFiltroCat(qual);
+  aplicarFiltroCat(qual);
+}
+
+function atualizarLabelFiltroCat(qual){
+  const label = document.getElementById(fcatId(qual, 'Label'));
+  if(!label) return;
+  const f = catFiltro[qual];
+  if(f === 'todas'){
+    label.textContent = 'Todas';
+  } else if(f.length === 1){
+    label.textContent = f[0];
+  } else {
+    label.textContent = f.length + ' categorias';
+  }
+}
+
+/* Redesenha só o que aquele filtro controla */
+function aplicarFiltroCat(qual){
+  if(qual === 'donut') renderDonut();
+  else renderHistorico();
+}
+
+/* Clicar fora fecha o dropdown */
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.filtro-cat-wrap')){
+    document.querySelectorAll('.filtro-cat-dropdown').forEach(function(el){ el.style.display = 'none'; });
+  }
+});
+
+atualizarLabelFiltroCat('donut');
+atualizarLabelFiltroCat('hist');
 
 </script>
 
