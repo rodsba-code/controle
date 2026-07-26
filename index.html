@@ -364,6 +364,70 @@
   @media (prefers-reduced-motion: reduce){
     *{ animation: none !important; transition: none !important; }
   }
+
+  /* ---------------- JANELA DE EDIÇÃO ---------------- */
+  .edit-overlay{
+    position: fixed; inset: 0; z-index: 90;
+    background: rgba(6,5,12,0.75);
+    backdrop-filter: blur(4px);
+    display:flex; align-items:flex-start; justify-content:center;
+    padding: 24px 14px; overflow-y:auto;
+  }
+  .edit-card{
+    width: 100%; max-width: 520px;
+    background: linear-gradient(180deg, var(--card), var(--bg2));
+    border: 1px solid rgba(168,85,247,0.3);
+    border-radius: 20px; padding: 20px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.6);
+    animation: subir .2s ease;
+  }
+  @keyframes subir{ from{ opacity:0; transform: translateY(14px);} to{ opacity:1; transform:none;} }
+  .edit-topo{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom: 18px; }
+  .edit-topo h2{ font-family: var(--font-display); font-size: 16px; }
+  .edit-topo .card-sub{ margin: 3px 0 0; }
+  .edit-fechar{
+    width: 34px; height: 34px; flex-shrink:0;
+    border-radius: 50%; border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.06); color: var(--texto-fraco);
+    font-size: 15px; cursor: pointer;
+  }
+  .edit-fechar:hover{ color: var(--texto); background: rgba(255,255,255,0.12); }
+  .edit-aviso{
+    background: rgba(251,191,36,0.09); border: 1px solid rgba(251,191,36,0.3);
+    color: var(--amarelo); border-radius: 11px; padding: 10px 13px;
+    font-size: 12px; margin-bottom: 16px; line-height:1.5;
+  }
+  #btnSalvarEdicao{ margin-top: 18px; }
+  #btnSalvarEdicao:disabled{
+    background: rgba(255,255,255,0.07); color: var(--texto-fraco);
+    box-shadow: none; cursor: not-allowed;
+  }
+
+  /* campos dentro da janela de edição — vale para as duas versões */
+  .edit-card .campos{ display:grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .edit-card .campo-full{ grid-column: 1 / -1; }
+  .edit-card .campos label{
+    font-size: 10.5px; color: var(--texto-fraco); text-transform: uppercase;
+    letter-spacing:.05em; display:block; margin-bottom: 6px; font-weight:600;
+  }
+  .edit-card .campos input, .edit-card .campos select{
+    width:100%; min-height: 44px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: var(--texto); padding: 10px 12px; border-radius: 11px;
+    font-family: var(--font-body); font-size: 14.5px;
+  }
+  .edit-card .campos input:focus, .edit-card .campos select:focus{
+    outline:none; border-color: var(--roxo); box-shadow: 0 0 0 3px rgba(168,85,247,0.18);
+  }
+  @media (max-width: 460px){ .edit-card .campos{ grid-template-columns: 1fr; } }
+  .edit-btn{
+    background:none; border:none; color: var(--texto-fraco);
+    cursor:pointer; font-size: 14px; padding: 4px 6px; border-radius: 8px;
+    transition: color .15s, background .15s;
+  }
+  .edit-btn:hover{ color: var(--roxo); background: rgba(168,85,247,0.12); }
+
 </style>
 </head>
 <body>
@@ -618,6 +682,10 @@ const LS_SYNC_URL = 'granaNeon_sync_url_v1';
 /* ---------------- SINCRONIZAÇÃO COM GOOGLE SHEETS ---------------- */
 let syncUrl = localStorage.getItem(LS_SYNC_URL) || '';
 let syncEmAndamento = false;
+/* Só liberamos gravação na planilha depois de uma leitura bem-sucedida.
+   Sem isso, um aparelho com dados desatualizados poderia sobrescrever
+   (e apagar) o que foi lançado em outro dispositivo. */
+let leituraConfirmada = false;
 
 function abrirConfigSync(){
   const painel = document.getElementById('syncConfig');
@@ -692,6 +760,8 @@ async function carregarDaPlanilha(){
     const jsonLanc = await respLanc.json();
     const jsonMetas = await respMetas.json();
 
+    leituraConfirmada = true;
+
     if(jsonLanc.ok && Array.isArray(jsonLanc.dados)){
       const brutos = JSON.stringify(jsonLanc.dados.map(l => [String(l.data||''), String(l.competencia||'')]));
       lancamentos = jsonLanc.dados.map(migrarLancamento);
@@ -721,6 +791,15 @@ async function carregarDaPlanilha(){
    tentamos de novo na próxima ação. */
 async function enviarParaPlanilha(acao, dados){
   if(!syncUrl || syncEmAndamento) return;
+
+  /* Trava de segurança: nunca grava por cima da planilha sem ter lido
+     a versão atual dela antes. Evita que este aparelho apague dados
+     lançados em outro. */
+  if(!leituraConfirmada){
+    atualizarBadgeSync('erro');
+    alert('Ainda não consegui ler a planilha, então não vou gravar nada para não apagar dados lançados em outro aparelho.\n\nVerifique a conexão e atualize a página.');
+    return;
+  }
   syncEmAndamento = true;
   atualizarBadgeSync('sincronizando');
 
@@ -1550,6 +1629,7 @@ function renderHistorico(){
         <div class="data">${formatarDataCurta(l.data)}</div>
         <div style="display:flex; align-items:center; gap:6px;">
           <div class="valor ${classeValor}">${sinal} ${formatarMoeda(l.valor)}</div>
+          <button class="edit-btn" onclick="abrirEdicao(${l.id})" title="Editar">✏️</button>
           <button class="del-btn" onclick="removerLancamento(${l.id})" title="Remover">✕</button>
         </div>
       </div>`;
@@ -1775,7 +1855,221 @@ document.addEventListener('visibilitychange', function(){
   }
 });
 
+
+/* ================================================================
+   EDIÇÃO DE LANÇAMENTO
+   ================================================================
+   Abre uma janela sobre o painel com os mesmos campos do formulário
+   de novo lançamento. O botão de salvar só fica ativo quando algo
+   muda; sem alterações, o X é a única saída. */
+
+/* Guarda o estado do lançamento ao abrir, para comparar depois */
+let edicaoAtual = null;
+let edicaoOriginal = null;
+
+function montarCamposEdicao(l){
+  const cats = l.tipo === 'receita' ? CATEGORIAS_RECEITA : CATEGORIAS_GASTO;
+  const opcoesCat = Object.keys(cats)
+    .map(c => `<option value="${c}" ${c === l.cat ? 'selected' : ''}>${cats[c].icone} ${c}</option>`)
+    .join('');
+
+  const ehCartao = l.origem === 'Cartão';
+  const ehTerceiro = l.cat === 'Terceiros';
+
+  const aviso = l.numParcelas > 1
+    ? `<div class="edit-aviso">Parcela ${l.parcelaAtual} de ${l.numParcelas} — a alteração vale só para esta parcela.</div>`
+    : '';
+
+  return `
+    ${aviso}
+    <div class="campos">
+      <div>
+        <label>Tipo</label>
+        <select id="eTipo">
+          <option value="gasto" ${l.tipo === 'gasto' ? 'selected' : ''}>Gasto</option>
+          <option value="receita" ${l.tipo === 'receita' ? 'selected' : ''}>Receita</option>
+        </select>
+      </div>
+      <div>
+        <label>Valor (R$)</label>
+        <input type="number" id="eValor" step="0.01" inputmode="decimal" value="${l.valor}">
+      </div>
+      <div class="campo-full">
+        <label>Descrição</label>
+        <input type="text" id="eDesc" value="${String(l.desc || '').replace(/"/g,'&quot;')}">
+      </div>
+      <div>
+        <label>Categoria</label>
+        <select id="eCat">${opcoesCat}</select>
+      </div>
+      <div>
+        <label>Data da compra</label>
+        <input type="date" id="eData" value="${l.data || ''}">
+      </div>
+      <div class="campo-full" id="eCampoTerceiro" style="${ehTerceiro ? '' : 'display:none;'}">
+        <label>Terceiro</label>
+        <input type="text" id="eTerceiro" placeholder="Nome da pessoa" value="${String(l.terceiro || '').replace(/"/g,'&quot;')}">
+      </div>
+      <div>
+        <label>Origem</label>
+        <select id="eOrigem">
+          <option value="Pix" ${!ehCartao ? 'selected' : ''}>💠 Pix</option>
+          <option value="Cartão" ${ehCartao ? 'selected' : ''}>💳 Cartão</option>
+        </select>
+      </div>
+      <div id="eCampoCartao" style="${ehCartao ? '' : 'display:none;'}">
+        <label>Cartão</label>
+        <select id="eCartao">
+          ${CARTOES_DISPONIVEIS.map(c => `<option value="${c}" ${c === l.cartao ? 'selected' : ''}>${c}</option>`).join('')}
+        </select>
+      </div>
+      <div id="eCampoVencimento" style="${ehCartao ? '' : 'display:none;'}">
+        <label>Dia do vencimento</label>
+        <input type="number" id="eVencimento" min="1" max="31" inputmode="numeric" value="${l.vencimento || ''}">
+      </div>
+      <div id="eCampoCompetencia" style="${ehCartao ? '' : 'display:none;'}">
+        <label>Fatura (competência)</label>
+        <input type="month" id="eCompetencia" value="${l.competencia || ''}">
+      </div>
+    </div>
+  `;
+}
+
+/* Lê os campos da janela e devolve um objeto comparável */
+function lerCamposEdicao(){
+  const origem = document.getElementById('eOrigem').value;
+  const cat = document.getElementById('eCat').value;
+  const data = document.getElementById('eData').value;
+  const ehCartao = origem === 'Cartão';
+
+  return {
+    tipo: document.getElementById('eTipo').value,
+    desc: document.getElementById('eDesc').value.trim(),
+    cat: cat,
+    terceiro: cat === 'Terceiros' ? document.getElementById('eTerceiro').value.trim() : null,
+    origem: origem,
+    cartao: ehCartao ? document.getElementById('eCartao').value : null,
+    vencimento: ehCartao ? (parseInt(document.getElementById('eVencimento').value, 10) || null) : null,
+    valor: parseFloat(document.getElementById('eValor').value),
+    data: data,
+    competencia: ehCartao
+      ? (document.getElementById('eCompetencia').value || (data || '').slice(0,7))
+      : (data || '').slice(0,7)
+  };
+}
+
+function abrirEdicao(id){
+  const l = lancamentos.find(x => String(x.id) === String(id));
+  if(!l) return;
+
+  edicaoAtual = l;
+  document.getElementById('editCorpo').innerHTML = montarCamposEdicao(l);
+  document.getElementById('editOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  edicaoOriginal = JSON.stringify(lerCamposEdicao());
+  atualizarBotaoSalvarEdicao();
+
+  // reage a qualquer mexida nos campos
+  document.getElementById('editCorpo').querySelectorAll('input, select').forEach(function(el){
+    el.addEventListener('input', aoMudarEdicao);
+    el.addEventListener('change', aoMudarEdicao);
+  });
+}
+
+function aoMudarEdicao(){
+  // mostra/esconde campos conforme origem e categoria
+  const ehCartao = document.getElementById('eOrigem').value === 'Cartão';
+  const ehTerceiro = document.getElementById('eCat').value === 'Terceiros';
+
+  document.getElementById('eCampoCartao').style.display = ehCartao ? '' : 'none';
+  document.getElementById('eCampoVencimento').style.display = ehCartao ? '' : 'none';
+  document.getElementById('eCampoCompetencia').style.display = ehCartao ? '' : 'none';
+  document.getElementById('eCampoTerceiro').style.display = ehTerceiro ? '' : 'none';
+
+  atualizarBotaoSalvarEdicao();
+}
+
+function houveAlteracaoEdicao(){
+  if(!edicaoOriginal) return false;
+  return JSON.stringify(lerCamposEdicao()) !== edicaoOriginal;
+}
+
+function atualizarBotaoSalvarEdicao(){
+  const btn = document.getElementById('btnSalvarEdicao');
+  if(!btn) return;
+  btn.disabled = !houveAlteracaoEdicao();
+}
+
+function fecharEdicao(){
+  if(houveAlteracaoEdicao()){
+    if(!confirm('Você mexeu em alguma coisa. Fechar sem salvar?')) return;
+  }
+  document.getElementById('editOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+  edicaoAtual = null;
+  edicaoOriginal = null;
+}
+
+function salvarEdicao(){
+  if(!edicaoAtual || !houveAlteracaoEdicao()) return;
+
+  const novo = lerCamposEdicao();
+
+  if(!novo.desc || isNaN(novo.valor) || novo.valor <= 0){
+    alert('Preencha a descrição e um valor maior que zero.');
+    return;
+  }
+  if(novo.cat === 'Terceiros' && !novo.terceiro){
+    alert('Informe o nome do terceiro.');
+    return;
+  }
+  if(novo.origem === 'Cartão'){
+    if(!novo.cartao){ alert('Escolha o cartão.'); return; }
+    if(!novo.vencimento || novo.vencimento < 1 || novo.vencimento > 31){
+      alert('Informe o dia do vencimento, de 1 a 31.'); return;
+    }
+    if(!/^\d{4}-\d{2}$/.test(novo.competencia)){
+      alert('Informe a fatura (mês de competência).'); return;
+    }
+  }
+
+  Object.assign(edicaoAtual, novo);
+  salvar();
+
+  document.getElementById('editOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+  edicaoAtual = null;
+  edicaoOriginal = null;
+
+  renderTudo();
+  if(typeof avisar === 'function') avisar('Lançamento atualizado');
+}
+
+/* Esc fecha a janela */
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    const ov = document.getElementById('editOverlay');
+    if(ov && ov.style.display === 'flex') fecharEdicao();
+  }
+});
+
 </script>
+
+
+<div class="edit-overlay" id="editOverlay" style="display:none;" onclick="if(event.target===this) fecharEdicao()">
+  <div class="edit-card" role="dialog" aria-modal="true" aria-label="Editar lançamento">
+    <div class="edit-topo">
+      <div>
+        <h2>✏️ Editar lançamento</h2>
+        <div class="card-sub">Altere o que precisar e salve</div>
+      </div>
+      <button class="edit-fechar" onclick="fecharEdicao()" title="Fechar" aria-label="Fechar">✕</button>
+    </div>
+    <div id="editCorpo"></div>
+    <button class="btn-add" id="btnSalvarEdicao" onclick="salvarEdicao()" disabled>Salvar alterações</button>
+  </div>
+</div>
 
 </body>
 </html>
