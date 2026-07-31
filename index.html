@@ -349,10 +349,10 @@
     flex:1; background:none; border:none; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
     height: var(--nav-h); color: var(--texto-fraco);
-    font-family: var(--font-body); font-size: 10.5px; font-weight:600;
+    font-family: var(--font-body); font-size: 9.5px; font-weight:600;
     position: relative; transition: color .18s;
   }
-  .nav button .ico{ font-size: 19px; line-height:1; }
+  .nav button .ico{ font-size: 18px; line-height:1; }
   .nav button.ativa{ color: var(--roxo); }
   .nav button.ativa::before{
     content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
@@ -453,6 +453,111 @@
   .filtro-cat-dropdown::-webkit-scrollbar-thumb{ background: rgba(168,85,247,0.45); border-radius:10px; }
   .filtro-cat-dropdown .filtro-cartao-item{ font-size: 13px; }
 
+
+  /* ---------------- CARD DE BALANÇO GERAL ---------------- */
+  .card-balanco{ border-color: rgba(168,85,247,0.28); }
+  .bal-linha{
+    display:flex; align-items:center; justify-content:space-between; gap: 14px;
+    padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.055);
+  }
+  .bal-linha:last-of-type{ border-bottom:none; }
+  .bal-rot{ font-size: 13.5px; color: var(--texto); display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .bal-rot small{ font-size: 10.5px; color: var(--texto-fraco); font-weight:400; line-height:1.4; }
+  .bal-val{ font-family: var(--font-mono); font-weight:700; font-size: 14px; white-space:nowrap; flex-shrink:0; }
+  .bal-grande{ font-size: 20px; }
+  .bal-destaque{
+    background: rgba(168,85,247,0.07);
+    border: 1px solid rgba(168,85,247,0.22);
+    border-radius: 13px; padding: 13px 14px; margin: 8px 0;
+  }
+  .bal-destaque .bal-rot{ font-weight:600; }
+
+  .bal-sep{
+    font-size: 10px; text-transform: uppercase; letter-spacing:.08em;
+    color: var(--texto-fraco); font-weight:700;
+    margin: 16px 0 4px; padding-top: 14px;
+    border-top: 1px dashed rgba(255,255,255,0.13);
+  }
+  .bal-rodape{
+    display:flex; gap: 10px; margin-top: 16px; padding-top: 14px;
+    border-top: 1px dashed rgba(255,255,255,0.12);
+  }
+  .bal-mini{ flex:1; display:flex; flex-direction:column; gap:4px; min-width:0; }
+  .bal-mini-rot{ font-size: 9.5px; color: var(--texto-fraco); text-transform:uppercase; letter-spacing:.05em; }
+  .bal-mini-val{ font-family: var(--font-mono); font-size: 12.5px; font-weight:700; }
+  @media (max-width: 420px){
+    .bal-rodape{ flex-wrap:wrap; }
+    .bal-mini{ flex: 1 1 45%; }
+  }
+
+
+  /* ---------------- INVESTIMENTOS ---------------- */
+  .inv-cab, .inv-item{
+    display:grid; grid-template-columns: 1fr auto 62px auto 34px;
+    align-items:center; gap: 10px;
+  }
+  .inv-cab{
+    padding: 0 2px 9px; font-size: 9.5px; text-transform:uppercase;
+    letter-spacing:.06em; color: var(--texto-fraco); font-weight:700;
+    border-bottom: 1px solid rgba(255,255,255,0.09);
+  }
+  .inv-cab span:nth-child(2), .inv-cab span:nth-child(3), .inv-cab span:nth-child(4){ text-align:right; }
+  .inv-item{
+    padding: 12px 2px;
+    border-bottom: 1px solid rgba(255,255,255,0.055);
+  }
+  .inv-item:last-child{ border-bottom:none; }
+  .inv-zerado{ opacity: .5; }
+  .inv-ticker{ display:flex; flex-direction:column; gap:3px; min-width:0; }
+  .inv-nome{ font-family: var(--font-mono); font-weight:700; font-size: 13.5px; color: var(--texto); }
+  .inv-peso{ font-size: 9.5px; color: var(--texto-fraco); }
+  .inv-preco{
+    background:none; border:none; cursor:pointer;
+    font-family: var(--font-mono); font-size: 12.5px; color: var(--texto-fraco);
+    text-align:right; padding: 4px 6px; border-radius: 7px;
+    display:flex; align-items:center; gap:5px; justify-content:flex-end;
+    transition: background .15s, color .15s;
+  }
+  .inv-preco:hover{ background: rgba(255,255,255,0.06); color: var(--texto); }
+  .inv-sem-preco{ color: var(--amarelo); }
+  .inv-tag-manual{
+    font-size: 8px; text-transform:uppercase; letter-spacing:.05em;
+    background: rgba(251,191,36,0.16); color: var(--amarelo);
+    padding: 2px 5px; border-radius: 4px; font-family: var(--font-body);
+  }
+  .inv-qtd{ font-family: var(--font-mono); font-size: 12.5px; color: var(--texto); text-align:right; }
+  .inv-total{ font-family: var(--font-mono); font-size: 13.5px; font-weight:700; color: var(--verde); text-align:right; white-space:nowrap; }
+  .inv-total-linha{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    background: rgba(34,211,238,0.07); border:1px solid rgba(34,211,238,0.22);
+    border-radius: 13px; padding: 13px 14px; margin-top: 16px;
+  }
+  .inv-aviso{
+    font-size: 10.5px; color: var(--texto-fraco); line-height:1.5;
+    margin-top: 14px; padding-top: 12px;
+    border-top: 1px dashed rgba(255,255,255,0.11);
+  }
+
+  /* janela de edição de quantidade */
+  .inv-edit-card{ max-width: 340px; }
+  .inv-edit-card .inv-edit-campo{ margin: 4px 0 6px; }
+  .inv-edit-card label{
+    font-size: 10.5px; color: var(--texto-fraco); text-transform:uppercase;
+    letter-spacing:.05em; display:block; margin-bottom: 7px; font-weight:600;
+  }
+  .inv-edit-card input{
+    width:100%; min-height: 50px;
+    background: rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.13);
+    color: var(--texto); padding: 12px 14px; border-radius: 12px;
+    font-family: var(--font-mono); font-size: 20px; text-align:center; font-weight:700;
+  }
+  .inv-edit-card input:focus{ outline:none; border-color: var(--roxo); box-shadow: 0 0 0 3px rgba(168,85,247,0.2); }
+  .inv-edit-dica{ font-size: 10.5px; color: var(--texto-fraco); text-align:center; margin-top: 8px; }
+  @media (max-width: 420px){
+    .inv-cab, .inv-item{ grid-template-columns: 1fr auto 52px auto 30px; gap: 7px; }
+    .inv-total{ font-size: 12px; }
+  }
+
 </style>
 </head>
 <body>
@@ -534,6 +639,12 @@
         <div class="sub" id="kpiMetaSub">progresso total</div>
       </div>
     </div>
+
+  <div class="card card-balanco">
+    <h2>🧮 Balanço geral</h2>
+    <div class="card-sub">Posição real até hoje, considerando todo o histórico</div>
+    <div id="balancoConteudo"></div>
+  </div>
 
     <div class="card">
       <div class="card-head">
@@ -671,6 +782,23 @@
     </div>
   </section>
 
+  <!-- ABA: INVESTIMENTOS -->
+  <section class="aba" id="aba-invest">
+
+  <div class="card card-invest">
+    <h2>📈 Investimentos</h2>
+    <div class="card-sub">Fundos imobiliários — cotação com atraso de até 20 min</div>
+    <div class="inv-cab">
+      <span>Ativo</span><span>Cotação</span><span>Qtd</span><span>Valor</span><span></span>
+    </div>
+    <div id="investLista"></div>
+    <div id="investRodape"></div>
+    <div class="inv-aviso">
+      A cotação vem do Google pela planilha. Quando aparecer “—”, toque no traço para informar o valor manualmente.
+    </div>
+  </div>
+  </section>
+
   <!-- ABA: METAS -->
   <section class="aba" id="aba-metas">
     <div class="card">
@@ -703,6 +831,9 @@
   </button>
   <button data-aba="historico" onclick="mostrarAba('historico')">
     <span class="ico">🧾</span><span>Histórico</span>
+  </button>
+  <button data-aba="invest" onclick="mostrarAba('invest')">
+    <span class="ico">📈</span><span>Invest</span>
   </button>
   <button data-aba="metas" onclick="mostrarAba('metas')">
     <span class="ico">🎯</span><span>Metas</span>
@@ -836,6 +967,7 @@ async function carregarDaPlanilha(){
 
     atualizarBadgeSync('ok');
     renderTudo();
+    carregarInvestimentosDaPlanilha();
     return true;
   }catch(err){
     atualizarBadgeSync('erro');
@@ -964,7 +1096,14 @@ let cartoesFiltro = 'todos'; // 'todos' | 'nenhum' | array de nomes de cartão s
 let anoGrafico = null;
 /* Filtros de categoria: um para a rosca, outro para o histórico.
    Declarados aqui porque a renderização inicial já os consulta. */
-let catFiltro = { donut: 'todas', hist: 'todas' }; // ano exibido no gráfico Receita vs. Gasto — INDEPENDENTE do filtro do topo
+let catFiltro = { donut: 'todas', hist: 'todas' };
+
+/* Investimentos: lista fixa de FIIs. Declarado aqui porque a
+   renderização inicial já consulta estas variáveis. */
+const ATIVOS_FIXOS = ['MXRF11','VGHF11','KNSC11','GARE11','HGLG11','KNRI11','XPML11'];
+const LS_INVEST = 'granaNeon_investimentos_v1';
+let investimentos = [];
+let investEditando = null; // ano exibido no gráfico Receita vs. Gasto — INDEPENDENTE do filtro do topo
 
 /* Converte qualquer formato de data (ISO, Date, string longa tipo
    "Wed Jul 01 2026 04:00:00 GMT-0300 (...)") para 'yyyy-MM-dd'. */
@@ -1775,6 +1914,8 @@ function renderTudo(){
   popularSeletorAno();
   popularSeletorMes();
   renderKPIs();
+  renderBalanco();
+  renderInvestimentos();
   renderDonut();
   renderBarras();
   renderMetas();
@@ -1782,6 +1923,7 @@ function renderTudo(){
 }
 
 /* ---------------- INIT ---------------- */
+investimentos = carregarInvestimentos();
 popularCategorias();
 onOrigemChange();
 document.getElementById('fData').value = new Date().toISOString().slice(0,10);
@@ -2226,6 +2368,306 @@ document.addEventListener('click', function(e){
 atualizarLabelFiltroCat('donut');
 atualizarLabelFiltroCat('hist');
 
+
+
+/* ================================================================
+   BALANÇO GERAL (posição real até hoje)
+   ================================================================
+   O corte é a data de HOJE, não o mês filtrado. Entradas e saídas
+   futuras ficam separadas, na linha "a vencer".
+
+   Para o cartão, o dinheiro só sai no vencimento da fatura — então
+   uma compra feita hoje com fatura no mês que vem ainda é futura.
+
+   Respeita o filtro de cartões (recorte de quais contas olhar), mas
+   ignora os filtros de mês, ano e categoria. */
+
+function hojeISO(){
+  const d = new Date();
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+/* Data em que o dinheiro efetivamente entra ou sai da conta */
+function dataEfetiva(l){
+  if(l.origem === 'Cartão' && l.vencimento && /^\d{4}-\d{2}$/.test(String(l.competencia || ''))){
+    return l.competencia + '-' + String(l.vencimento).padStart(2,'0');
+  }
+  if(/^\d{4}-\d{2}-\d{2}$/.test(String(l.data || ''))) return l.data;
+  if(/^\d{4}-\d{2}$/.test(String(l.competencia || ''))) return l.competencia + '-01';
+  return '';
+}
+
+function dataBonita(iso){
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return iso;
+  const [y,m,d] = iso.split('-');
+  return `${d}/${m}/${y}`;
+}
+
+function renderBalanco(){
+  const alvo = document.getElementById('balancoConteudo');
+  if(!alvo) return;
+
+  const base = lancamentosPorCartaoFiltrados();
+
+  if(!base.length){
+    alvo.innerHTML = '<div class="empty">Sem lançamentos para calcular o balanço.</div>';
+    return;
+  }
+
+  const hoje = hojeISO();
+
+  const realizados = base.filter(function(l){
+    const d = dataEfetiva(l);
+    return d && d <= hoje;
+  });
+  const futuros = base.filter(function(l){
+    const d = dataEfetiva(l);
+    return d && d > hoje;
+  });
+
+  const recebido = realizados.filter(l => l.tipo === 'receita').reduce((s,l)=>s+l.valor, 0);
+  const pago     = realizados.filter(l => l.tipo === 'gasto').reduce((s,l)=>s+l.valor, 0);
+  const saldoHoje = recebido - pago;
+
+  const aReceber = futuros.filter(l => l.tipo === 'receita').reduce((s,l)=>s+l.valor, 0);
+  const aPagar   = futuros.filter(l => l.tipo === 'gasto').reduce((s,l)=>s+l.valor, 0);
+  const projetado = saldoHoje + aReceber - aPagar;
+
+  const cor = v => v >= 0 ? 'var(--verde)' : 'var(--vermelho)';
+
+  let blocoFuturo = '';
+  if(futuros.length){
+    const linhaReceber = aReceber > 0 ? `
+      <div class="bal-linha">
+        <span class="bal-rot">A receber<small>entradas ainda não realizadas</small></span>
+        <span class="bal-val" style="color:var(--ciano)">+${formatarMoeda(aReceber)}</span>
+      </div>` : '';
+
+    const linhaPagar = aPagar > 0 ? `
+      <div class="bal-linha">
+        <span class="bal-rot">
+          A pagar
+          <small>faturas e parcelas já lançadas — ${futuros.filter(l=>l.tipo==='gasto').length} lançamento(s)</small>
+        </span>
+        <span class="bal-val" style="color:var(--rosa)">−${formatarMoeda(aPagar)}</span>
+      </div>` : '';
+
+    blocoFuturo = `
+      <div class="bal-sep">Ainda não aconteceu</div>
+      ${linhaReceber}
+      ${linhaPagar}
+      <div class="bal-linha bal-destaque">
+        <span class="bal-rot">Saldo projetado<small>depois de tudo que já está lançado</small></span>
+        <span class="bal-val" style="color:${cor(projetado)}">${formatarMoeda(projetado)}</span>
+      </div>`;
+  }
+
+  alvo.innerHTML = `
+    <div class="bal-linha">
+      <span class="bal-rot">Recebido<small>todas as entradas já realizadas</small></span>
+      <span class="bal-val" style="color:var(--ciano)">+${formatarMoeda(recebido)}</span>
+    </div>
+
+    <div class="bal-linha">
+      <span class="bal-rot">Pago<small>saídas já debitadas, incluindo faturas vencidas</small></span>
+      <span class="bal-val" style="color:var(--rosa)">−${formatarMoeda(pago)}</span>
+    </div>
+
+    <div class="bal-linha bal-destaque">
+      <span class="bal-rot">
+        Saldo até hoje
+        <small>posição real em ${dataBonita(hoje)} — ${realizados.length} lançamento(s)</small>
+      </span>
+      <span class="bal-val bal-grande" style="color:${cor(saldoHoje)}">${formatarMoeda(saldoHoje)}</span>
+    </div>
+
+    ${blocoFuturo}
+  `;
+}
+
+
+
+/* ================================================================
+   INVESTIMENTOS (FIIs)
+   ================================================================
+   Lista fixa de ativos. A cotação vem da planilha (função
+   GOOGLEFINANCE). Quando o Google não devolve o ticker — a cobertura
+   de FIIs é irregular — o campo fica em branco e você pode digitar a
+   cotação na mão, que passa a ter prioridade.
+
+   As quantidades ficam salvas localmente e, se houver planilha
+   conectada, também são gravadas nela. */
+
+
+function carregarInvestimentos(){
+  let salvos = [];
+  try{
+    const raw = localStorage.getItem(LS_INVEST);
+    if(raw) salvos = JSON.parse(raw);
+  }catch(e){}
+
+  // a lista de ativos é fixa: reconstrói sempre a partir dela
+  return ATIVOS_FIXOS.map(function(t){
+    const achado = salvos.find(function(a){ return a.ticker === t; }) || {};
+    return {
+      ticker: t,
+      qtd: Number(achado.qtd) || 0,
+      preco: Number(achado.preco) || 0,
+      manual: !!achado.manual
+    };
+  });
+}
+
+function salvarInvestimentos(){
+  localStorage.setItem(LS_INVEST, JSON.stringify(investimentos));
+  if(typeof enviarParaPlanilha === 'function'){
+    enviarParaPlanilha('salvar_investimentos', investimentos.map(function(a){
+      return { ticker: a.ticker, qtd: a.qtd, precoManual: a.manual ? a.preco : 0 };
+    }));
+  }
+}
+
+/* Busca cotações e quantidades na planilha */
+async function carregarInvestimentosDaPlanilha(){
+  if(!syncUrl) return false;
+  try{
+    const resp = await fetch(syncUrl + '?tipo=investimentos');
+    const json = await resp.json();
+    if(json.ok && Array.isArray(json.dados) && json.dados.length){
+      investimentos = ATIVOS_FIXOS.map(function(t){
+        const daPlanilha = json.dados.find(function(a){ return a.ticker === t; });
+        const local = investimentos.find(function(a){ return a.ticker === t; }) || {};
+        if(!daPlanilha) return { ticker: t, qtd: local.qtd || 0, preco: local.preco || 0, manual: !!local.manual };
+        return {
+          ticker: t,
+          qtd: Number(daPlanilha.qtd) || 0,
+          preco: Number(daPlanilha.preco) || 0,
+          manual: !!daPlanilha.manual
+        };
+      });
+      localStorage.setItem(LS_INVEST, JSON.stringify(investimentos));
+      renderInvestimentos();
+      return true;
+    }
+  }catch(e){}
+  return false;
+}
+
+function renderInvestimentos(){
+  const alvo = document.getElementById('investLista');
+  if(!alvo) return;
+
+  const patrimonio = investimentos.reduce(function(s,a){ return s + a.qtd * a.preco; }, 0);
+  const semCotacao = investimentos.filter(function(a){ return a.preco <= 0 && a.qtd > 0; }).length;
+
+  alvo.innerHTML = investimentos.map(function(a){
+    const total = a.qtd * a.preco;
+    const temPreco = a.preco > 0;
+    const peso = patrimonio > 0 ? Math.round(total / patrimonio * 100) : 0;
+
+    return `
+      <div class="inv-item ${a.qtd > 0 ? '' : 'inv-zerado'}">
+        <div class="inv-ticker">
+          <span class="inv-nome">${a.ticker}</span>
+          ${a.qtd > 0 && patrimonio > 0 ? `<span class="inv-peso">${peso}% da carteira</span>` : ''}
+        </div>
+
+        <button class="inv-preco ${temPreco ? '' : 'inv-sem-preco'}"
+                onclick="editarPrecoInvest('${a.ticker}')"
+                title="${temPreco ? (a.manual ? 'Cotação informada por você — toque para alterar' : 'Cotação do Google — toque para informar outra') : 'Cotação indisponível — toque para informar'}">
+          ${temPreco ? formatarMoeda(a.preco) : '—'}
+          ${a.manual && temPreco ? '<span class="inv-tag-manual">manual</span>' : ''}
+        </button>
+
+        <span class="inv-qtd">${a.qtd.toLocaleString('pt-BR')}</span>
+
+        <span class="inv-total">${temPreco ? formatarMoeda(total) : '—'}</span>
+
+        <button class="edit-btn" onclick="abrirEdicaoInvest('${a.ticker}')" title="Editar quantidade">✏️</button>
+      </div>`;
+  }).join('');
+
+  const rodape = document.getElementById('investRodape');
+  if(rodape){
+    rodape.innerHTML = `
+      <div class="inv-total-linha">
+        <span class="bal-rot">
+          Patrimônio investido
+          <small>${investimentos.filter(a=>a.qtd>0).length} ativo(s) na carteira${semCotacao ? ` · ${semCotacao} sem cotação` : ''}</small>
+        </span>
+        <span class="bal-val bal-grande" style="color:var(--ciano)">${formatarMoeda(patrimonio)}</span>
+      </div>`;
+  }
+}
+
+/* ---------------- EDITAR QUANTIDADE ---------------- */
+function abrirEdicaoInvest(ticker){
+  const a = investimentos.find(function(x){ return x.ticker === ticker; });
+  if(!a) return;
+
+  investEditando = ticker;
+  document.getElementById('invEditTitulo').textContent = ticker;
+  const campo = document.getElementById('invEditQtd');
+  campo.value = a.qtd;
+  document.getElementById('invEditOverlay').style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+
+  setTimeout(function(){ campo.focus(); campo.select(); }, 80);
+}
+
+function fecharEdicaoInvest(){
+  document.getElementById('invEditOverlay').style.display = 'none';
+  document.body.style.overflow = '';
+  investEditando = null;
+}
+
+function salvarEdicaoInvest(){
+  if(!investEditando) return;
+  const a = investimentos.find(function(x){ return x.ticker === investEditando; });
+  if(!a) return;
+
+  let q = parseInt(document.getElementById('invEditQtd').value, 10);
+  if(isNaN(q) || q < 0) q = 0;
+  if(q > 100000){
+    alert('A quantidade máxima é 100.000 cotas.');
+    q = 100000;
+  }
+
+  a.qtd = q;
+  salvarInvestimentos();
+  fecharEdicaoInvest();
+  renderInvestimentos();
+  if(typeof avisar === 'function') avisar(a.ticker + ': ' + q.toLocaleString('pt-BR') + ' cota(s)');
+}
+
+/* ---------------- COTAÇÃO MANUAL ---------------- */
+function editarPrecoInvest(ticker){
+  const a = investimentos.find(function(x){ return x.ticker === ticker; });
+  if(!a) return;
+
+  const atual = a.preco > 0 ? String(a.preco).replace('.', ',') : '';
+  const txt = prompt(
+    `Cotação de ${ticker}\n\n` +
+    `Deixe em branco para voltar a usar a cotação automática do Google.`,
+    atual
+  );
+  if(txt === null) return;
+
+  const limpo = String(txt).trim().replace(/\./g,'').replace(',', '.');
+  if(limpo === ''){
+    a.manual = false;
+    a.preco = 0; // volta a valer o que a planilha trouxer
+  } else {
+    const v = parseFloat(limpo);
+    if(isNaN(v) || v <= 0){ alert('Informe um valor maior que zero.'); return; }
+    a.preco = v;
+    a.manual = true;
+  }
+
+  salvarInvestimentos();
+  renderInvestimentos();
+}
+
 </script>
 
 
@@ -2240,6 +2682,26 @@ atualizarLabelFiltroCat('hist');
     </div>
     <div id="editCorpo"></div>
     <button class="btn-add" id="btnSalvarEdicao" onclick="salvarEdicao()" disabled>Salvar alterações</button>
+  </div>
+</div>
+
+
+<div class="edit-overlay" id="invEditOverlay" style="display:none;" onclick="if(event.target===this) fecharEdicaoInvest()">
+  <div class="edit-card inv-edit-card" role="dialog" aria-modal="true" aria-label="Editar quantidade">
+    <div class="edit-topo">
+      <div>
+        <h2>✏️ <span id="invEditTitulo">Ativo</span></h2>
+        <div class="card-sub">Quantidade de cotas</div>
+      </div>
+      <button class="edit-fechar" onclick="fecharEdicaoInvest()" aria-label="Fechar">✕</button>
+    </div>
+    <div class="inv-edit-campo">
+      <label>Quantidade</label>
+      <input type="number" id="invEditQtd" min="0" max="100000" step="1" inputmode="numeric"
+             onkeydown="if(event.key==='Enter') salvarEdicaoInvest()">
+      <div class="inv-edit-dica">de 0 a 100.000 cotas</div>
+    </div>
+    <button class="btn-add" onclick="salvarEdicaoInvest()">Salvar</button>
   </div>
 </div>
 
