@@ -636,56 +636,58 @@
   .tema-btn:hover{ background: rgba(var(--tint),0.12); }
   .tema-btn:active{ transform: scale(.93); }
 
-  /* ---------------- CONTAS RECORRENTES ---------------- */
-  .rec-item{
-    display:grid; grid-template-columns: 40px 1fr auto 34px;
-    align-items:center; gap: 12px; padding: 12px 2px;
-    border-bottom: 1px solid rgba(var(--tint),0.055);
+
+  /* ---------------- FATURAS / EXTRATO DE CARTÃO ---------------- */
+  .item-fatura{ cursor:pointer; border-radius: 10px; transition: background .15s ease; }
+  .item-fatura:hover{ background: rgba(236,72,153,0.07); }
+  .icone-fatura{
+    background: rgba(236,72,153,0.16) !important;
+    color: var(--rosa) !important;
+    box-shadow: none !important;
   }
-  .rec-item:last-child{ border-bottom:none; }
-  .rec-encerrada{ opacity:.5; }
-  .rec-info{ min-width:0; }
-  .rec-desc{ font-size: 14px; display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
-  .rec-meta{ font-size: 10.5px; color: var(--texto-fraco); margin-top:3px; }
-  .rec-valor{ font-family: var(--font-mono); font-weight:700; font-size: 13.5px; color: var(--rosa); text-align:right; white-space:nowrap; }
-  .rec-valor small{ font-size: 9.5px; color: var(--texto-fraco); font-weight:400; display:block; }
-  .rec-tag{
-    font-size: 9px; text-transform:uppercase; letter-spacing:.04em;
-    padding: 2px 6px; border-radius: 5px; font-family: var(--font-body); font-weight:600;
+  .fat-ir{ color: var(--texto-fraco); font-size: 17px; padding: 0 4px; }
+
+  .fatura{
+    border: 1px solid rgba(var(--tint),0.1);
+    border-radius: 14px; margin-bottom: 10px; overflow: hidden;
   }
-  .rec-tag-ativa{ background: rgba(34,229,154,0.16); color: var(--verde); }
-  .rec-tag-ate{ background: rgba(251,191,36,0.16); color: var(--amarelo); }
-  .rec-tag-fim{ background: rgba(var(--tint),0.1); color: var(--texto-fraco); }
-  .rec-total{
-    display:flex; align-items:center; justify-content:space-between; gap:14px;
-    background: rgba(236,72,153,0.07); border:1px solid rgba(236,72,153,0.22);
-    border-radius: 13px; padding: 13px 14px; margin-top: 16px;
-  }
-  .btn-nova-regra{
-    width:100%; min-height: 46px; margin-top: 14px;
-    background: rgba(var(--tint),0.05);
-    border: 1px dashed rgba(168,85,247,0.45);
-    color: var(--roxo); font-weight:700; font-size: 14px;
-    border-radius: 12px; cursor:pointer; font-family: var(--font-body);
+  .fatura.aberta{ border-color: rgba(236,72,153,0.3); }
+  .fat-topo{
+    width:100%; display:grid; grid-template-columns: 1fr auto 18px;
+    align-items:center; gap: 12px; padding: 14px;
+    background: rgba(var(--tint),0.03); border:none; cursor:pointer;
+    font-family: var(--font-body); color: var(--texto); text-align:left;
     transition: background .15s ease;
   }
-  .btn-nova-regra:hover{ background: rgba(168,85,247,0.1); }
-  .regra-dica{ font-size: 11px; color: var(--texto-fraco); line-height:1.55; margin-top: 2px; }
-  #regraExcluir{
-    width:100%; min-height: 44px; margin-top: 10px;
-    background: none; border: 1px solid rgba(248,113,113,0.4);
-    color: var(--vermelho); font-weight:600; font-size: 13.5px;
-    border-radius: 12px; cursor:pointer; font-family: var(--font-body);
+  .fat-topo:hover{ background: rgba(var(--tint),0.07); }
+  .fat-nome{ font-size: 14.5px; font-weight:700; display:flex; flex-direction:column; gap:3px; }
+  .fat-nome small{ font-size: 10.5px; color: var(--texto-fraco); font-weight:400; }
+  .fat-total{ font-family: var(--font-mono); font-weight:700; font-size: 15px; color: var(--rosa); white-space:nowrap; }
+  .fat-chev{ color: var(--texto-fraco); font-size: 11px; }
+  .fat-corpo{ padding: 4px 12px 10px; }
+  .fat-item{
+    display:grid; grid-template-columns: 34px 1fr auto auto auto;
+    align-items:center; gap: 10px; padding: 10px 2px;
+    border-bottom: 1px solid rgba(var(--tint),0.05);
   }
-  #regraExcluir:hover{ background: rgba(248,113,113,0.1); }
-
-  /* marca do lançamento gerado por regra */
-  .item-fixo .icone{ position:relative; }
-  .tag-fixa{
-    font-size: 8.5px; text-transform:uppercase; letter-spacing:.04em;
-    background: rgba(168,85,247,0.16); color: var(--roxo);
-    padding: 2px 5px; border-radius: 4px; font-family: var(--font-body); font-weight:600;
-    margin-left: 6px;
+  .fat-item:last-child{ border-bottom:none; }
+  .fat-item .icone{ width:32px; height:32px; border-radius:9px; font-size:14px; }
+  .fat-desc{ font-size: 13.5px; min-width:0; }
+  .fat-desc .cat{ font-size: 10px; color: var(--texto-fraco); margin-top:3px; }
+  .fat-parc{
+    font-size: 9px; background: rgba(var(--tint),0.1); color: var(--texto-fraco);
+    padding: 1px 5px; border-radius: 4px; font-family: var(--font-mono);
+  }
+  .fat-val{ font-family: var(--font-mono); font-weight:700; font-size: 13px; color: var(--rosa); white-space:nowrap; }
+  .fat-val.pos{ color: var(--verde); }
+  .fat-soma{
+    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    background: rgba(236,72,153,0.07); border:1px solid rgba(236,72,153,0.22);
+    border-radius: 13px; padding: 13px 14px; margin-top: 14px;
+  }
+  @media (max-width: 460px){
+    .fat-item{ grid-template-columns: 30px 1fr auto auto auto; gap: 7px; }
+    .fat-val{ font-size: 12px; }
   }
 
 </style>
@@ -893,8 +895,8 @@
     <div class="card">
       <div class="card-head">
         <div>
-          <h2>🧾 Lançamentos</h2>
-          <div class="card-sub">Do período selecionado acima</div>
+          <h2>🧾 Conta</h2>
+          <div class="card-sub">Pix um a um; o cartão entra como fatura</div>
         </div>
         <div class="filtro-cat-wrap">
           <button class="filtro-cat-btn" id="fcathistBtn" onclick="toggleFiltroCat('hist')">
@@ -930,15 +932,14 @@
   </div>
   </section>
 
-  <!-- ABA: CONTAS FIXAS -->
-  <section class="aba" id="aba-fixas">
+  <!-- ABA: CARTÕES -->
+  <section class="aba" id="aba-cartoes">
 
-  <div class="card card-recorrentes">
-    <h2>🔁 Contas fixas</h2>
-    <div class="card-sub">Cadastre uma vez; elas aparecem em todo mês sozinhas</div>
-    <div id="recLista"></div>
-    <div id="recRodape"></div>
-    <button class="btn-nova-regra" onclick="abrirRegra(null)">+ Nova conta fixa</button>
+  <div class="card" id="secaoCartoes">
+    <h2>💳 Cartões</h2>
+    <div class="card-sub" id="cartoesSub">Faturas do período</div>
+    <div id="cartoesLista"></div>
+    <div id="cartoesRodape"></div>
   </div>
   </section>
 
@@ -973,10 +974,10 @@
     <span class="ico">➕</span><span>Lançar</span>
   </button>
   <button data-aba="historico" onclick="mostrarAba('historico')">
-    <span class="ico">🧾</span><span>Histórico</span>
+    <span class="ico">🧾</span><span>Conta</span>
   </button>
-  <button data-aba="fixas" onclick="mostrarAba('fixas')">
-    <span class="ico">🔁</span><span>Fixas</span>
+  <button data-aba="cartoes" onclick="mostrarAba('cartoes')">
+    <span class="ico">💳</span><span>Cartões</span>
   </button>
   <button data-aba="invest" onclick="mostrarAba('invest')">
     <span class="ico">📈</span><span>Invest</span>
@@ -1115,7 +1116,6 @@ async function carregarDaPlanilha(){
     atualizarBadgeSync('ok');
     renderTudo();
     carregarInvestimentosDaPlanilha();
-    carregarRecorrentesDaPlanilha();
     return true;
   }catch(err){
     atualizarBadgeSync('erro');
@@ -1245,18 +1245,14 @@ let anoGrafico = null;
 /* Filtros de categoria: um para a rosca, outro para o histórico.
    Declarados aqui porque a renderização inicial já os consulta. */
 let catFiltro = { donut: 'todas', hist: 'todas' };
+let cartoesAbertos = {};   /* quais faturas estão expandidas */
 
 /* Investimentos: lista fixa de FIIs. Declarado aqui porque a
    renderização inicial já consulta estas variáveis. */
 const ATIVOS_FIXOS = ['MXRF11','VGHF11','KNSC11','GARE11','HGLG11','KNRI11','XPML11'];
 const LS_INVEST = 'granaNeon_investimentos_v1';
 let investimentos = [];
-let investEditando = null;
-
-/* Contas fixas: regras, não ocorrências. */
-const LS_RECORRENTES = 'granaNeon_recorrentes_v1';
-const MESES_MINIMOS = 3;   /* piso do horizonte, em meses à frente */
-let recorrentes = []; // ano exibido no gráfico Receita vs. Gasto — INDEPENDENTE do filtro do topo
+let investEditando = null; // ano exibido no gráfico Receita vs. Gasto — INDEPENDENTE do filtro do topo
 
 /* Converte qualquer formato de data (ISO, Date, string longa tipo
    "Wed Jul 01 2026 04:00:00 GMT-0300 (...)") para 'yyyy-MM-dd'. */
@@ -1352,8 +1348,6 @@ function salvarMetas(){
   enviarParaPlanilha('salvar_metas', metas);
 }
 function salvar(){
-  /* segurança: linhas geradas por regra nunca vão para a planilha */
-  lancamentos = lancamentos.filter(function(l){ return !l.gerado; });
   localStorage.setItem(LS_KEY, JSON.stringify(lancamentos));
   enviarParaPlanilha('salvar_lancamentos', lancamentos);
 }
@@ -1369,14 +1363,13 @@ function formatarDataCurta(d){
 
 /* ---------------- FILTRO DE MÊS / ANO ---------------- */
 function lancamentosPorCartaoFiltrados(){
-  const base = lancamentosComRecorrentes();
   if(cartoesFiltro === 'nenhum'){
-    return base.filter(l => l.origem === 'Pix');
+    return lancamentos.filter(l => l.origem === 'Pix');
   }
   if(Array.isArray(cartoesFiltro)){
-    return base.filter(l => l.origem === 'Pix' ? false : cartoesFiltro.includes(l.cartao));
+    return lancamentos.filter(l => l.origem === 'Pix' ? false : cartoesFiltro.includes(l.cartao));
   }
-  return base; // 'todos'
+  return lancamentos; // 'todos'
 }
 
 function lancamentosFiltrados(){
@@ -1951,48 +1944,42 @@ function previewMeta(id, valorDigitado, alvo){
 function renderHistorico(){
   const container = document.getElementById('listaLancamentos');
   const dados = lancamentosFiltrados().filter(l => passaFiltroCat(l, 'hist'));
+
   if(!dados.length){
-    container.innerHTML = '<div class="empty">Nenhum lançamento neste mês. Adicione um acima! 👆</div>';
+    container.innerHTML = '<div class="empty">Nenhum lançamento neste período.</div>';
     return;
   }
-  const ordenado = [...dados].sort((a,b) => new Date(b.data) - new Date(a.data));
 
-  container.innerHTML = ordenado.map(l => {
+  /* Na visão de conta, o cartão não aparece compra a compra:
+     vira uma linha só com o total da fatura, como no extrato bancário. */
+  const naConta = dados.filter(l => l.origem !== 'Cartão');
+  const faturas = faturasDoPeriodo(dados);
+
+  const linhasFatura = faturas.map(f => `
+      <div class="item item-fatura" onclick="verCartao('${f.cartao}')" title="Ver as compras desta fatura">
+        <div class="icone icone-fatura">💳</div>
+        <div class="desc">
+          Fatura ${f.cartao}
+          <div class="cat">${f.itens.length} compra(s)${f.vencimento ? ' · vence dia ' + f.vencimento : ''} · toque para abrir</div>
+        </div>
+        <div class="data"></div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <div class="valor neg">− ${formatarMoeda(f.total)}</div>
+          <span class="fat-ir">›</span>
+        </div>
+      </div>`).join('');
+
+  const ordenado = [...naConta].sort((a,b) => new Date(b.data) - new Date(a.data));
+
+  const linhasConta = ordenado.map(l => {
     const cats = l.tipo === 'receita' ? CATEGORIAS_RECEITA : CATEGORIAS_GASTO;
     const info = cats[l.cat] || cats['Outros'];
     const sinal = l.tipo === 'receita' ? '+' : '−';
     const classeValor = l.tipo === 'receita' ? 'pos' : 'neg';
 
-    if(l.gerado){
-      const infoG = (CATEGORIAS_GASTO[l.cat] || CATEGORIAS_GASTO['Outros']);
-      return `
-      <div class="item item-fixo">
-        <div class="icone" style="background:${infoG.cor}22; color:${infoG.cor};">${infoG.icone}</div>
-        <div class="desc">
-          ${l.desc} <span class="tag-fixa">fixa</span>
-          <div class="cat">${l.cat} · ${l.origem === 'Cartão' && l.cartao ? '💳 ' + l.cartao : '💠 Pix'} · conta fixa</div>
-        </div>
-        <div class="data">${formatarDataCurta(l.data)}</div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <div class="valor neg">− ${formatarMoeda(l.valor)}</div>
-          <button class="edit-btn" onclick="abrirRegra('${l.recorrenteId}')" title="Editar conta fixa">✏️</button>
-          <button class="del-btn" onclick="encerrarRecorrente('${l.recorrenteId}')" title="Encerrar conta fixa">✕</button>
-        </div>
-      </div>`;
-    }
-
     let subInfo = l.cat;
-    if(l.terceiro){
-      subInfo += ` (${l.terceiro})`;
-    }
-    if(l.origem === 'Pix'){
-      subInfo += ` · 💠 Pix`;
-    } else if(l.origem === 'Cartão'){
-      const parcelaTxt = l.numParcelas > 1 ? ` (${l.parcelaAtual}/${l.numParcelas})` : '';
-      const [cy,cm] = l.competencia.split('-');
-      const compLabel = `${NOMES_MES_CURTO[parseInt(cm,10)-1]}/${cy}`;
-      subInfo += ` · 💳 ${l.cartao}${parcelaTxt} · fat. ${compLabel} · compra ${formatarDataCurta(l.data)}`;
-    }
+    if(l.terceiro) subInfo += ` (${l.terceiro})`;
+    subInfo += ` · 💠 ${l.origem}`;
 
     return `
       <div class="item">
@@ -2009,6 +1996,8 @@ function renderHistorico(){
         </div>
       </div>`;
   }).join('');
+
+  container.innerHTML = linhasFatura + linhasConta;
 }
 
 /* ---------------- FILTRO DE CARTÕES ---------------- */
@@ -2090,16 +2079,15 @@ function renderTudo(){
   renderKPIs();
   renderBalanco();
   renderInvestimentos();
-  renderRecorrentes();
   renderDonut();
   renderBarras();
   renderMetas();
   renderHistorico();
+  renderCartoes();
 }
 
 /* ---------------- INIT ---------------- */
 investimentos = carregarInvestimentos();
-recorrentes = carregarRecorrentes();
 popularCategorias();
 onOrigemChange();
 document.getElementById('fData').value = new Date().toISOString().slice(0,10);
@@ -2900,350 +2888,135 @@ function alternarTema(){
 
 
 
+
+
 /* ================================================================
-   CONTAS RECORRENTES
+   VISÃO POR CARTÃO
    ================================================================
-   Guardamos a REGRA ("1850 todo mês desde março, sem fim previsto"),
-   não cada ocorrência. As linhas dos meses são geradas na tela e
-   nunca vão para a aba de Lançamentos.
+   Espelha o que você vê na vida real:
 
-   Vantagem: se o valor mudar, você encerra a regra e cria outra —
-   o passado continua com o valor antigo, sem editar linha por linha.
+   • CONTA  — os Pix aparecem um a um; cada cartão vira UMA linha
+              com o total da fatura daquele mês.
+   • CARTÕES — o extrato de cada cartão: total da fatura em destaque
+              e as compras que a compõem.
 
-   HORIZONTE: uma regra sem fim precisa parar em algum lugar. Ela vai
-   até o mês mais distante que já tem registro real (a última parcela
-   de um 12x, por exemplo). Meses além disso não existem no app.
-   Piso de MESES_MINIMOS à frente para o horizonte não colapsar
-   quando você apaga uma compra longa. */
+   Nada muda no lançamento nem nos cálculos: é só a forma de exibir. */
 
+/* Nome do mês a partir de "AAAA-MM" */
 function rotuloMes(chave){
-  if(!/^\d{4}-\d{2}$/.test(chave)) return chave;
-  const [y,m] = chave.split('-');
+  if(!/^\d{4}-\d{2}$/.test(String(chave))) return chave;
+  const [y,m] = String(chave).split('-');
   return NOMES_MES[parseInt(m,10)-1] + '/' + y;
 }
 
-function competenciaHoje(){
-  const d = new Date();
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-}
 
-function somarMeses(chave, n){
-  const [y,m] = chave.split('-').map(Number);
-  const d = new Date(y, (m-1) + n, 1);
-  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0');
-}
-
-function carregarRecorrentes(){
-  try{
-    const raw = localStorage.getItem(LS_RECORRENTES);
-    if(raw) return JSON.parse(raw).filter(regraValida);
-  }catch(e){}
-  return [];
-}
-
-function regraValida(r){
-  return r && r.desc && Number(r.valor) > 0 && /^\d{4}-\d{2}$/.test(String(r.inicio || ''));
-}
-
-function salvarRecorrentes(){
-  localStorage.setItem(LS_RECORRENTES, JSON.stringify(recorrentes));
-  if(typeof enviarParaPlanilha === 'function'){
-    enviarParaPlanilha('salvar_recorrentes', recorrentes);
-  }
-}
-
-/* Até onde as contas sem fim devem aparecer.
-   É o mês mais distante com lançamento real — nunca menos que
-   MESES_MINIMOS à frente de hoje. */
-function horizonteRecorrentes(){
-  const hoje = competenciaHoje();
-  const piso = somarMeses(hoje, MESES_MINIMOS);
-
-  let maior = hoje;
-  lancamentos.filter(function(l){ return !l.gerado; }).forEach(function(l){
-    const c = String(l.competencia || '');
-    if(/^\d{4}-\d{2}$/.test(c) && c > maior) maior = c;
+/* Agrupa os lançamentos de cartão do período por cartão */
+function faturasDoPeriodo(dados){
+  const mapa = {};
+  dados.filter(function(l){ return l.origem === 'Cartão' && l.cartao; })
+       .forEach(function(l){
+    if(!mapa[l.cartao]) mapa[l.cartao] = { cartao: l.cartao, itens: [], total: 0, vencimento: l.vencimento };
+    mapa[l.cartao].itens.push(l);
+    mapa[l.cartao].total += (l.tipo === 'receita' ? -l.valor : l.valor);
+    if(!mapa[l.cartao].vencimento && l.vencimento) mapa[l.cartao].vencimento = l.vencimento;
   });
 
-  return maior > piso ? maior : piso;
+  return CARTOES_DISPONIVEIS
+    .filter(function(c){ return mapa[c]; })
+    .map(function(c){ return mapa[c]; });
 }
 
-/* Transforma as regras nas ocorrências de cada mês */
-function ocorrenciasRecorrentes(){
-  if(!recorrentes.length) return [];
-
-  const limite = horizonteRecorrentes();
-  const saida = [];
-
-  recorrentes.forEach(function(r){
-    if(!regraValida(r)) return;
-
-    // a regra termina no seu próprio fim, ou no horizonte
-    const fimRegra = /^\d{4}-\d{2}$/.test(String(r.fim || '')) ? r.fim : null;
-    let fim = fimRegra && fimRegra < limite ? fimRegra : limite;
-    if(fimRegra && fimRegra < r.inicio) return; // encerrada antes de começar
-
-    let mes = r.inicio;
-    let guarda = 0;
-    while(mes <= fim && guarda < 600){
-      guarda++;
-      const dia = r.vencimento ? String(r.vencimento).padStart(2,'0') : '01';
-      saida.push({
-        id: 'rec-' + r.id + '-' + mes,
-        recorrenteId: r.id,
-        gerado: true,                 // marca: não vai para a planilha
-        tipo: 'gasto',
-        desc: r.desc,
-        cat: r.cat || 'Outros',
-        terceiro: r.terceiro || null,
-        origem: r.origem || 'Pix',
-        cartao: r.cartao || null,
-        vencimento: r.vencimento || null,
-        numParcelas: 1,
-        parcelaAtual: 1,
-        grupoParcelaId: null,
-        valor: Number(r.valor),
-        data: mes + '-' + dia,
-        competencia: mes
-      });
-      mes = somarMeses(mes, 1);
-    }
-  });
-
-  return saida;
+/* Rótulo do mês que está sendo exibido */
+function rotuloPeriodo(){
+  if(mesFiltro !== 'todos') return rotuloMes(mesFiltro);
+  if(anoFiltro !== 'todos') return anoFiltro;
+  return 'todo o período';
 }
 
-/* Lista que as telas enxergam: lançamentos reais + ocorrências geradas */
-function lancamentosComRecorrentes(){
-  return lancamentos.concat(ocorrenciasRecorrentes());
-}
-
-/* ---------------- PAINEL DE REGRAS ---------------- */
-
-function renderRecorrentes(){
-  const alvo = document.getElementById('recLista');
+/* ---------------- SEÇÃO: CARTÕES ---------------- */
+function renderCartoes(){
+  const alvo = document.getElementById('cartoesLista');
   if(!alvo) return;
 
-  const hoje = competenciaHoje();
-  const limite = horizonteRecorrentes();
+  const dados = lancamentosFiltrados();
+  const faturas = faturasDoPeriodo(dados);
 
-  if(!recorrentes.length){
-    alvo.innerHTML = '<div class="empty">Nenhuma conta fixa cadastrada.<br>Cadastre aluguel, assinaturas e mensalidades aqui — elas aparecem sozinhas todo mês.</div>';
-  } else {
-    alvo.innerHTML = recorrentes.map(function(r){
-      const info = (CATEGORIAS_GASTO[r.cat] || CATEGORIAS_GASTO['Outros']);
-      const encerrada = /^\d{4}-\d{2}$/.test(String(r.fim || '')) && r.fim < hoje;
-      const vaiEncerrar = /^\d{4}-\d{2}$/.test(String(r.fim || '')) && r.fim >= hoje;
+  const sub = document.getElementById('cartoesSub');
+  if(sub) sub.textContent = 'Faturas de ' + rotuloPeriodo();
 
-      let situacao;
-      if(encerrada) situacao = `<span class="rec-tag rec-tag-fim">encerrada em ${rotuloMes(r.fim)}</span>`;
-      else if(vaiEncerrar) situacao = `<span class="rec-tag rec-tag-ate">até ${rotuloMes(r.fim)}</span>`;
-      else situacao = `<span class="rec-tag rec-tag-ativa">ativa</span>`;
-
-      const meio = r.origem === 'Cartão' && r.cartao
-        ? `💳 ${r.cartao}${r.vencimento ? ' · venc. dia ' + r.vencimento : ''}`
-        : '💠 Pix';
-
-      return `
-        <div class="rec-item ${encerrada ? 'rec-encerrada' : ''}">
-          <div class="icone" style="background:${info.cor}22; color:${info.cor};">${info.icone}</div>
-          <div class="rec-info">
-            <div class="rec-desc">${r.desc} ${situacao}</div>
-            <div class="rec-meta">${r.cat} · ${meio} · desde ${rotuloMes(r.inicio)}</div>
-          </div>
-          <div class="rec-valor">${formatarMoeda(r.valor)}<small>/mês</small></div>
-          <button class="edit-btn" onclick="abrirRegra('${r.id}')" title="Editar regra">✏️</button>
-        </div>`;
-    }).join('');
+  if(!faturas.length){
+    alvo.innerHTML = '<div class="empty">Nenhuma compra no cartão neste período.</div>';
+    const rod = document.getElementById('cartoesRodape');
+    if(rod) rod.innerHTML = '';
+    return;
   }
 
-  const rodape = document.getElementById('recRodape');
-  if(rodape){
-    const ativas = recorrentes.filter(function(r){
-      return !(/^\d{4}-\d{2}$/.test(String(r.fim || '')) && r.fim < hoje);
-    });
-    const mensal = ativas.reduce(function(s,r){ return s + Number(r.valor); }, 0);
+  alvo.innerHTML = faturas.map(function(f){
+    const aberto = !!cartoesAbertos[f.cartao];
+    const itens = [...f.itens].sort(function(a,b){ return new Date(b.data) - new Date(a.data); });
 
+    const linhas = itens.map(function(l){
+      const cats = l.tipo === 'receita' ? CATEGORIAS_RECEITA : CATEGORIAS_GASTO;
+      const info = cats[l.cat] || cats['Outros'];
+      const parcela = l.numParcelas > 1 ? ` <span class="fat-parc">${l.parcelaAtual}/${l.numParcelas}</span>` : '';
+      const terceiro = l.terceiro ? ` · ${l.terceiro}` : '';
+      return `
+        <div class="fat-item">
+          <div class="icone" style="background:${info.cor}22; color:${info.cor};">${info.icone}</div>
+          <div class="fat-desc">
+            ${l.desc}${parcela}
+            <div class="cat">${l.cat}${terceiro} · compra ${formatarDataCurta(l.data)}</div>
+          </div>
+          <div class="fat-val ${l.tipo === 'receita' ? 'pos' : ''}">${l.tipo === 'receita' ? '+' : ''} ${formatarMoeda(l.valor)}</div>
+          <button class="edit-btn" onclick="abrirEdicao(${l.id})" title="Editar">✏️</button>
+          <button class="del-btn" onclick="removerLancamento(${l.id})" title="Remover">✕</button>
+        </div>`;
+    }).join('');
+
+    return `
+      <div class="fatura ${aberto ? 'aberta' : ''}">
+        <button class="fat-topo" onclick="alternarCartao('${f.cartao}')">
+          <div class="fat-nome">
+            💳 ${f.cartao}
+            <small>${f.itens.length} compra(s)${f.vencimento ? ' · vence dia ' + f.vencimento : ''}</small>
+          </div>
+          <div class="fat-total">${formatarMoeda(f.total)}</div>
+          <span class="fat-chev">${aberto ? '▴' : '▾'}</span>
+        </button>
+        <div class="fat-corpo" style="${aberto ? '' : 'display:none;'}">${linhas}</div>
+      </div>`;
+  }).join('');
+
+  const total = faturas.reduce(function(s,f){ return s + f.total; }, 0);
+  const rodape = document.getElementById('cartoesRodape');
+  if(rodape){
     rodape.innerHTML = `
-      <div class="rec-total">
+      <div class="fat-soma">
         <span class="bal-rot">
-          Compromisso mensal
-          <small>${ativas.length} conta(s) ativa(s) · lançadas até ${rotuloMes(limite)}</small>
+          Total nos cartões
+          <small>${faturas.length} fatura(s) em ${rotuloPeriodo()}</small>
         </span>
-        <span class="bal-val bal-grande" style="color:var(--rosa)">${formatarMoeda(mensal)}</span>
+        <span class="bal-val bal-grande" style="color:var(--rosa)">${formatarMoeda(total)}</span>
       </div>`;
   }
 }
 
-/* ---------------- CRIAR / EDITAR REGRA ---------------- */
-
-let regraEditando = null;
-
-function abrirRegra(id){
-  const r = id ? recorrentes.find(function(x){ return String(x.id) === String(id); }) : null;
-  regraEditando = r ? r.id : null;
-
-  const cats = Object.keys(CATEGORIAS_GASTO)
-    .map(function(c){
-      const sel = r && r.cat === c ? 'selected' : (!r && c === 'Assinaturas' ? 'selected' : '');
-      return `<option value="${c}" ${sel}>${CATEGORIAS_GASTO[c].icone} ${c}</option>`;
-    }).join('');
-
-  const ehCartao = r ? r.origem === 'Cartão' : false;
-
-  document.getElementById('regraTitulo').textContent = r ? 'Editar conta fixa' : 'Nova conta fixa';
-  document.getElementById('regraCorpo').innerHTML = `
-    <div class="campos">
-      <div class="campo-full">
-        <label>Descrição</label>
-        <input type="text" id="rDesc" placeholder="Ex: Netflix" value="${r ? String(r.desc).replace(/"/g,'&quot;') : ''}">
-      </div>
-      <div>
-        <label>Valor por mês (R$)</label>
-        <input type="number" id="rValor" step="0.01" inputmode="decimal" value="${r ? r.valor : ''}">
-      </div>
-      <div>
-        <label>Categoria</label>
-        <select id="rCat">${cats}</select>
-      </div>
-      <div>
-        <label>Origem</label>
-        <select id="rOrigem" onchange="onOrigemRegra()">
-          <option value="Pix" ${!ehCartao ? 'selected' : ''}>💠 Pix</option>
-          <option value="Cartão" ${ehCartao ? 'selected' : ''}>💳 Cartão</option>
-        </select>
-      </div>
-      <div id="rCampoCartao" style="${ehCartao ? '' : 'display:none;'}">
-        <label>Cartão</label>
-        <select id="rCartao">
-          ${CARTOES_DISPONIVEIS.map(function(c){
-            return `<option value="${c}" ${r && r.cartao === c ? 'selected' : ''}>${c}</option>`;
-          }).join('')}
-        </select>
-      </div>
-      <div id="rCampoVenc" style="${ehCartao ? '' : 'display:none;'}">
-        <label>Dia do vencimento</label>
-        <input type="number" id="rVenc" min="1" max="31" inputmode="numeric" value="${r && r.vencimento ? r.vencimento : ''}">
-      </div>
-      <div>
-        <label>Primeiro mês</label>
-        <input type="month" id="rInicio" value="${r ? r.inicio : competenciaHoje()}">
-      </div>
-      <div>
-        <label>Último mês</label>
-        <input type="month" id="rFim" value="${r && r.fim ? r.fim : ''}">
-      </div>
-      <div class="campo-full regra-dica">
-        Deixe o último mês em branco enquanto a conta seguir ativa.
-        Para cancelar (uma assinatura, por exemplo), informe o mês final —
-        os meses já passados continuam no histórico.
-      </div>
-    </div>`;
-
-  document.getElementById('regraExcluir').style.display = r ? '' : 'none';
-  document.getElementById('regraOverlay').style.display = 'flex';
-  document.body.style.overflow = 'hidden';
+function alternarCartao(cartao){
+  cartoesAbertos[cartao] = !cartoesAbertos[cartao];
+  renderCartoes();
 }
 
-function onOrigemRegra(){
-  const cartao = document.getElementById('rOrigem').value === 'Cartão';
-  document.getElementById('rCampoCartao').style.display = cartao ? '' : 'none';
-  document.getElementById('rCampoVenc').style.display = cartao ? '' : 'none';
-}
+/* Leva o usuário ao extrato daquele cartão */
+function verCartao(cartao){
+  cartoesAbertos[cartao] = true;
+  renderCartoes();
 
-function fecharRegra(){
-  document.getElementById('regraOverlay').style.display = 'none';
-  document.body.style.overflow = '';
-  regraEditando = null;
-}
-
-function salvarRegra(){
-  const desc = document.getElementById('rDesc').value.trim();
-  const valor = parseFloat(document.getElementById('rValor').value);
-  const cat = document.getElementById('rCat').value;
-  const origem = document.getElementById('rOrigem').value;
-  const inicio = document.getElementById('rInicio').value;
-  const fim = document.getElementById('rFim').value;
-
-  if(!desc || isNaN(valor) || valor <= 0){
-    alert('Preencha a descrição e um valor maior que zero.'); return;
-  }
-  if(!/^\d{4}-\d{2}$/.test(inicio)){
-    alert('Informe o primeiro mês.'); return;
-  }
-  if(fim && fim < inicio){
-    alert('O último mês não pode ser anterior ao primeiro.'); return;
-  }
-
-  let cartao = null, venc = null;
-  if(origem === 'Cartão'){
-    cartao = document.getElementById('rCartao').value;
-    venc = parseInt(document.getElementById('rVenc').value, 10) || null;
-    if(!cartao){ alert('Escolha o cartão.'); return; }
-    if(!venc || venc < 1 || venc > 31){ alert('Informe o dia do vencimento, de 1 a 31.'); return; }
-  }
-
-  const dados = { desc: desc, valor: valor, cat: cat, origem: origem,
-                  cartao: cartao, vencimento: venc, inicio: inicio, fim: fim || '', terceiro: null };
-
-  if(regraEditando){
-    const r = recorrentes.find(function(x){ return String(x.id) === String(regraEditando); });
-    if(r) Object.assign(r, dados);
+  if(typeof mostrarAba === 'function'){
+    mostrarAba('cartoes');           // app: troca de aba
   } else {
-    const novoId = recorrentes.length ? Math.max.apply(null, recorrentes.map(function(x){ return Number(x.id) || 0; })) + 1 : 1;
-    recorrentes.push(Object.assign({ id: novoId }, dados));
+    const sec = document.getElementById('secaoCartoes');
+    if(sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
-
-  salvarRecorrentes();
-  fecharRegra();
-  renderTudo();
-  if(typeof avisar === 'function') avisar('Conta fixa salva');
-}
-
-function excluirRegra(){
-  if(!regraEditando) return;
-  const r = recorrentes.find(function(x){ return String(x.id) === String(regraEditando); });
-  if(!r) return;
-
-  if(!confirm(
-    `Apagar "${r.desc}" de vez?\n\n` +
-    `Isso remove também os meses já passados do histórico.\n\n` +
-    `Se a conta apenas acabou, o certo é informar o último mês — ` +
-    `assim o passado é preservado.`
-  )) return;
-
-  recorrentes = recorrentes.filter(function(x){ return String(x.id) !== String(regraEditando); });
-  salvarRecorrentes();
-  fecharRegra();
-  renderTudo();
-}
-
-/* Encerra a regra no mês corrente — atalho para o botão do histórico */
-function encerrarRecorrente(recId){
-  const r = recorrentes.find(function(x){ return String(x.id) === String(recId); });
-  if(!r) return;
-  const mes = competenciaHoje();
-  if(!confirm(`Encerrar "${r.desc}" em ${rotuloMes(mes)}?\n\nOs meses anteriores continuam no histórico.`)) return;
-  r.fim = mes;
-  salvarRecorrentes();
-  renderTudo();
-}
-
-/* ---------------- SINCRONIZAÇÃO ---------------- */
-
-async function carregarRecorrentesDaPlanilha(){
-  if(!syncUrl) return false;
-  try{
-    const resp = await fetch(syncUrl + '?tipo=recorrentes');
-    const json = await resp.json();
-    if(json.ok && Array.isArray(json.dados)){
-      recorrentes = json.dados.filter(regraValida);
-      localStorage.setItem(LS_RECORRENTES, JSON.stringify(recorrentes));
-      renderTudo();
-      return true;
-    }
-  }catch(e){}
-  return false;
 }
 
 </script>
@@ -3283,21 +3056,6 @@ async function carregarRecorrentesDaPlanilha(){
   </div>
 </div>
 
-
-<div class="edit-overlay" id="regraOverlay" style="display:none;" onclick="if(event.target===this) fecharRegra()">
-  <div class="edit-card" role="dialog" aria-modal="true" aria-label="Conta fixa">
-    <div class="edit-topo">
-      <div>
-        <h2>🔁 <span id="regraTitulo">Conta fixa</span></h2>
-        <div class="card-sub">Some sozinha todo mês, até você encerrar</div>
-      </div>
-      <button class="edit-fechar" onclick="fecharRegra()" aria-label="Fechar">✕</button>
-    </div>
-    <div id="regraCorpo"></div>
-    <button class="btn-add" onclick="salvarRegra()">Salvar conta fixa</button>
-    <button id="regraExcluir" onclick="excluirRegra()">Apagar de vez</button>
-  </div>
-</div>
 
 </body>
 </html>
